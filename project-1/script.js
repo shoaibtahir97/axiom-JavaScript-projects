@@ -34,11 +34,23 @@ function getFieldId(input) {
     return input.id.charAt(0).toUpperCase() + input.id.slice(1);
 }
 
+function checkLength(input, min, max) {
+    if(input.value.length < min){
+        showFailure(input, `${getFieldId(input)} should be at least ${min} characters`)
+    }else if( input.value.length > max ){
+        showFailure(input, `${getFieldId(input)} should be less than ${max}`)
+    }else{
+        showSuccess(input)
+    }
+}
+
+
 // Created and adddEventListener to prevent the page from reloading as the data is not saved
 form.addEventListener("submit", function(e){
     e.preventDefault();
     checkRequired([username, email, password, password2])
-    
+    checkLength(username, 3, 10);
+    checkLength(password, 6, 30)
 });
 
 
