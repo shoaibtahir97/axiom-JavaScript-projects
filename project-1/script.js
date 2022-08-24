@@ -22,11 +22,22 @@ function isValidEmail(email){
     return re.test(String(email).toLowerCase())
 }
 
+function checkRequired(inputArray) {
+    inputArray.forEach(function(input){
+       if(input.value === ''){
+            showFailure(input, `${getFieldId(input)} is required`)
+       }
+    })
+}
+
+function getFieldId(input) {
+    return input.id.charAt(0).toUpperCase() + input.id.slice(1);
+}
 
 // Created and adddEventListener to prevent the page from reloading as the data is not saved
 form.addEventListener("submit", function(e){
     e.preventDefault();
-
+    checkRequired([username, email, password, password2])
     
 });
 
