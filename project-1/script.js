@@ -17,9 +17,15 @@ function showSuccess(input) {
     formControl.className = "form-control success"
 }
 
-function isValidEmail(email){
+function checkEmail(input){
     const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    return re.test(String(email).toLowerCase())
+    if(re.test(input.value.trim())) {
+        showSuccess(input)
+    }
+    else{
+        showFailure(input, `${getFieldId(input)} is not a valid email`)
+    }
+    
 }
 
 function checkRequired(inputArray) {
@@ -44,13 +50,24 @@ function checkLength(input, min, max) {
     }
 }
 
+function checkPassword(input, input2) {
+    if(input.value !== input2.value){
+        showFailure(input2, "Passwords do not match")
+    }
+    else{
+        showSuccess(input2)
+    }
+}
+
 
 // Created and adddEventListener to prevent the page from reloading as the data is not saved
 form.addEventListener("submit", function(e){
     e.preventDefault();
     checkRequired([username, email, password, password2])
     checkLength(username, 3, 10);
-    checkLength(password, 6, 30)
+    checkLength(password, 6, 30);
+    checkEmail(email);
+    checkPassword(password, password2)
 });
 
 
