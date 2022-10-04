@@ -11,6 +11,9 @@ const total = document.getElementById("total");
 
 const movieSelect = document.getElementById("movie");
 
+populateUI()
+
+
 let ticketPrice = parseInt(movieSelect.value) ;
 
 function updateSelectedCount()  {
@@ -36,10 +39,37 @@ function updateSelectedCount()  {
     total.innerHTML = selectedSeatsCount * ticketPrice;
 
     localStorage.setItem("selectedSeats", JSON.stringify(seatsIndex));
-
-
 }
 
+
+//Save the slected movie data to local storage
+function setMovieData(movieIndex, moviePrice){
+    localStorage.setItem("selectedMovieIndex", movieIndex);
+    localStorage.setItem("selectedMoviePrice", moviePrice);
+
+}                                                                                                                                                                      
+
+function populateUI() {
+    const selectedSeats = JSON.parse(localStorage.getItem("selectedSeats"))
+    console.log(selectedSeats)
+    // Check if there is any data inside selectedSeats && there is not an empty array
+    if(selectedSeats !== null && selectedSeats.length > 0){
+    //Access all the seats and run forEach loop to update all the seats. 
+    //forEach takes a input which is a function. The function further takes two inputs 
+    //and which is a seat and its index 
+    // 
+        seats.forEach((seat,index)=> {
+            if(selectedSeats.indexOf(index) > -1){
+                seat.classList.add("selected")
+            }
+        })  
+    }
+    const selectedMovieIndex = localStorage.getItem("selectedMovieIndex");
+    if(selectedMovieIndex !== null){
+        movieSelect.selectedIndex = selectedMovieIndex
+    }
+
+}
 
 container.addEventListener("click", e => {
     if(e.target.classList.contains('seat') &&
@@ -50,6 +80,11 @@ container.addEventListener("click", e => {
 })
 
 movieSelect.addEventListener('change', e => {
-    ticketPrice = parseInt(e.target.value); 
+    ticketPrice = parseInt(e.target.value);
+    setMovieData(e.target.selectedIndex, e.target.value); 
     updateSelectedCount()
 })
+
+//Calling the function again and updating Selected seats and count based on the 
+//value present in local storage
+updateSelectedCount()
